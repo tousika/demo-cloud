@@ -1,0 +1,29 @@
+server:
+  port: 7084
+eureka:
+  client:
+    service-url:
+#      defaultZone: http://admin:admin@eureka-server-node1.com:7081/eureka/,http://admin:admin@eureka-server-node2.com:7082/eureka/
+      defaultZone: http://admin:admin@localhost:7081/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+spring:
+  application:
+    name:  config-server
+  cloud:
+    config:
+      server:
+        git:
+          search-paths: '{application}'
+          clone-on-start: true
+          uri: http://git.xxxxxx.com/sijia.dong/config.git
+          username: xxxx
+          password: xxxx
+          label: master
+management:
+  security:
+    enabled: false
+
+
+

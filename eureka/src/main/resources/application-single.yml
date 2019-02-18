@@ -1,0 +1,31 @@
+server:
+  port: 7081
+spring:
+  application:
+    name: eureka-server
+  profiles:
+      active: single
+eureka:
+  server:
+    renewal-percent-threshold: 0.3
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://admin:admin@localhost:${server.port}/eureka/
+    healthcheck:
+      enabled: false
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    hostname: node
+security:
+  basic:
+    enabled: true
+  user:
+    name: admin
+    password: admin
+management:
+  security:
+    enabled: false
+

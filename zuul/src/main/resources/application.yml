@@ -1,0 +1,28 @@
+server:
+  undertow:
+    accesslog:
+      enabled: true
+      dir: /Users/lixin/var/zuul/log/gw.search.lianjia.com
+service:
+  monitor:
+    wechat:
+      host: http://10.23.247.61:9876
+      users: lixin
+# 网关地址映射
+zuul:
+  ignored-services: '*'
+  routes:
+    api-a:
+      path: /api/relative/**
+      serviceId: relative-search
+    api-b:
+      path: /api/recommend/baike/**
+      serviceId: search-content
+      token: 'baike'
+    api-c:
+      path: /api/search/**
+      serviceId: search-v2
+      token: 'search'
+    api-d:
+      path: /api/blacklist/**
+      serviceId: spider-blacklist

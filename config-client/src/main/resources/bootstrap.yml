@@ -1,0 +1,24 @@
+server:
+  port: 7085
+eureka:
+  client:
+    service-url:
+#      defaultZone: http://admin:admin@eureka-server-node1.com:7081/eureka/,http://admin:admin@eureka-server-node2.com:7082/eureka/
+      defaultZone: http://admin:admin@localhost:7081/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+spring:
+  application:
+    name: config-client
+  cloud:
+    config:
+          label: master #指定分支
+          profile: dev
+          discovery:
+            serviceId: config-server
+            enabled: true
+
+management:
+  security:
+    enabled: false
