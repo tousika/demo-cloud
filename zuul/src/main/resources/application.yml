@@ -1,0 +1,22 @@
+server:
+  undertow:
+    accesslog:
+      enabled: true
+      dir: /
+service:
+  monitor:
+    wechat:
+      host:
+      users:
+zuul:
+  prefix: /api
+  ignored-services: '*'
+  routes:
+    api-a:
+      path: /configclient/**
+      serviceId: config-client
+#      sensitive-headers: Cookie,Set-Cookie
+      token: '111'
+    api-test:
+      path: /local/**
+      url: forward:/local

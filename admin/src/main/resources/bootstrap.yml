@@ -1,5 +1,5 @@
 server:
-  port: 7084
+  port: 7089
 eureka:
   client:
     service-url:
@@ -10,21 +10,17 @@ eureka:
     instance-id: ${spring.cloud.client.ipAddress}:${server.port}
 spring:
   application:
-    name:  config-server
-  cloud:
-    config:
-      server:
-        git:
-          search-paths: '{application}'
-          clone-on-start: true
-          uri: http://git.elephantailab.com/sijia.dong/config.git
-#          uri: http://172.16.237.113:80/sijia.dong/config.git  #正式
-          username: sijia.dong
-          password: d12345678
-          label: master
+    name: admin
+  boot:
+    admin:
+      routes:
+        endpoints: env,metrics,dump,jolokia,info,configprops,trace,logfile,refresh,flyway,liquibase,heapdump,loggers,auditevents,hystrix.stream
 management:
   security:
     enabled: false
-
-
-
+security:
+  basic:
+    enabled: false
+  user:
+    name: admin
+    password: admin

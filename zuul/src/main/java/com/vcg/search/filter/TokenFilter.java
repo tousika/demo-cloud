@@ -8,6 +8,7 @@ import com.vcg.search.bean.UrlToken;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,7 +17,8 @@ import static org.springframework.cloud.netflix.zuul.filters.support.FilterConst
 /**
  * Created by dongsijia on 2019/2/14.
  */
-public class TokenFilter extends ZuulFilter {
+@Component public class TokenFilter extends ZuulFilter {
+
     private final static Logger LOGGER = LoggerFactory.getLogger(TokenFilter.class);
 
     /**
@@ -41,6 +43,15 @@ public class TokenFilter extends ZuulFilter {
      * 控制过滤器生效不生效，可以在里面写一串逻辑来控制
      */
     @Override public boolean shouldFilter() {
+        //共享RequestContext，上下文对象
+        RequestContext requestContext = RequestContext.getCurrentContext();
+        HttpServletRequest request = requestContext.getRequest();
+
+        System.out.println(request.getRequestURI());
+        //需要权限校验URL
+        if ("/api/local".equalsIgnoreCase(request.getRequestURI())) {
+            return false;
+        }
         return true;
     }
 
@@ -49,6 +60,7 @@ public class TokenFilter extends ZuulFilter {
         HttpServletRequest request = ctx.getRequest();
         String url = request.getRequestURI();
         String token = request.getHeader("token");
+        System.out.println("access token ok---------------");
         if (StringUtils.isEmpty(token)) {
             LOGGER.warn("token is empty, url:{}", url);
             ctx.setSendZuulResponse(false);
@@ -57,14 +69,14 @@ public class TokenFilter extends ZuulFilter {
             ctx.setResponseBody(JSONObject.toJSONString(response));
             return null;
         }
-        if (!checkToken(url, token)) {
-            LOGGER.warn("token invalid, url:{}, token:{}", url, token);
-            ctx.setSendZuulResponse(false);
-            ctx.setResponseStatusCode(401);
-            Render response = new Render(1002, "token invalid");
-            ctx.setResponseBody(JSONObject.toJSONString(response));
-            return null;
-        }
+//        if (!checkToken(url, token)) {
+//            LOGGER.warn("token invalid, url:{}, token:{}", url, token);
+//            ctx.setSendZuulResponse(false);
+//            ctx.setResponseStatusCode(401);
+//            Render response = new Render(1002, "token invalid");
+//            ctx.setResponseBody(JSONObject.toJSONString(response));
+//            return null;
+//        }
         return null;
     }
 
